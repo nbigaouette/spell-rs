@@ -1,27 +1,29 @@
+use serde_derive::*;
+
 use crate::{tokenize, LcsSeq, LineId};
 
-#[derive(Debug)]
+#[derive(Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct LcsObject {
-    seq: LcsSeq,
-    lines_ids: Vec<LineId>,
+    pub tokens: LcsSeq,
+    pub lines_ids: Vec<LineId>,
 }
 
 impl LcsObject {
     pub fn from_str(s: &str, line_id: LineId) -> LcsObject {
-        let seq = tokenize(s).map(|s| s.to_string()).collect();
-        LcsObject::new(seq, line_id)
+        let tokens = tokenize(s).map(|s| s.to_string()).collect();
+        LcsObject::new(tokens, line_id)
     }
 
-    pub fn from_str_slice(seq: &[&str], line_id: LineId) -> LcsObject {
+    pub fn from_str_slice(tokens: &[&str], line_id: LineId) -> LcsObject {
         LcsObject {
-            seq: seq.iter().map(|s| s.to_string()).collect(),
+            tokens: tokens.iter().map(|s| s.to_string()).collect(),
             lines_ids: vec![line_id],
         }
     }
 
-    pub fn new(seq: LcsSeq, line_id: LineId) -> LcsObject {
+    pub fn new(tokens: LcsSeq, line_id: LineId) -> LcsObject {
         LcsObject {
-            seq,
+            tokens,
             lines_ids: vec![line_id],
         }
     }
@@ -31,7 +33,7 @@ impl LcsObject {
 
         // Simple loop implementation from the paper
         let mut last_match = 0;
-        for s_left in self.seq.iter().filter(|s| *s != "*") {
+        for s_left in self.tokens.iter().filter(|s| *s != "*") {
             for (j, s_right) in other.iter().enumerate().skip(last_match) {
                 if s_left == s_right {
                     last_match = j;
@@ -44,12 +46,12 @@ impl LcsObject {
         count
     }
 
-    pub fn insert(&mut self, seq: LcsSeq, line_id: LineId) {
+    pub fn insert(&mut self, tokens: LcsSeq, line_id: LineId) {
         self.lines_ids.push(line_id);
         let mut tmp = String::with_capacity(256);
         let mut last_match = 0;
         let mut placeholder = false;
-        for s_left in self.seq.iter() {
+        for s_left in self.tokens.iter() {
             if s_left == "*" {
                 if !placeholder {
                     tmp.push_str("* ");
@@ -58,12 +60,12 @@ impl LcsObject {
                 continue;
             }
 
-            for (j, s_right) in seq.iter().enumerate().skip(last_match) {
+            for (j, s_right) in tokens.iter().enumerate().skip(last_match) {
                 if s_left == s_right {
                     placeholder = false;
                     tmp.push_str(&s_left);
                     tmp.push(' ');
-                    last_match = j;
+                    last_match = j + 1;
                     break;
                 } else if !placeholder {
                     tmp.push_str("* ");
@@ -72,11 +74,11 @@ impl LcsObject {
             }
         }
 
-        self.seq = tmp.trim().split(' ').map(|s| s.to_string()).collect();
+        self.tokens = tmp.trim().split(' ').map(|s| s.to_string()).collect();
     }
 
     pub fn length(&self) -> usize {
-        self.seq.len()
+        self.tokens.len()
     }
 
     pub fn count(&self) -> usize {
@@ -89,7 +91,7 @@ impl std::fmt::Display for LcsObject {
         write!(
             f,
             "{}\n\t\t{{{}}}",
-            self.seq
+            self.tokens
                 .iter()
                 .map(|s| &**s)
                 .collect::<Vec<&str>>()
@@ -110,7 +112,6 @@ mod tests {
     #[test]
     fn constructor() {
         let input = "Command Failed on: node-127";
-        let lcs_object = LcsObject::from_str(input, 0);
-        println!("lcs_object: {:?}", lcs_object);
+        let _lcs_object = LcsObject::from_str(input, 0);
     }
 }
