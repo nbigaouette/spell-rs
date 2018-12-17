@@ -15,6 +15,3 @@ description = "Spell is a Streaming Parser for Event Logs using an LCS_ (Longest
 [dependencies]
 serde = "1.0"
 serde_derive = "1.0"
-
-[dev-dependencies]
-pretty_assertions = "0.5"
