@@ -36,7 +36,7 @@ impl LcsObject {
         for s_left in self.tokens.iter().filter(|s| *s != "*") {
             for (j, s_right) in other.iter().enumerate().skip(last_match) {
                 if s_left == s_right {
-                    last_match = j;
+                    last_match = j + 1;
                     count += 1;
                     break;
                 }
