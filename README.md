@@ -4,6 +4,7 @@ _spell-rs_ is a _Spell_ implementation in Rust.
 
 Spell is a _**S**treaming **P**arser for **E**vent **L**ogs using an **L**CS_ (Longest Common Subsequence).
 
+[![Build Status](https://travis-ci.org/nbigaouette/spell-rs.svg?branch=master)](https://travis-ci.org/nbigaouette/spell-rs)
 ## Reference
 
 Min Du and Feifei Li. Spell: Streaming Parsing of System Event Logs. 2016 IEEE 16th International
