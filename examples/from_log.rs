@@ -23,15 +23,22 @@ fn main() -> Result<()> {
 
     buffered
         .lines()
-        .enumerate()
-        .take_while(|(i, _line)| *i < max_lines)
-        .for_each(|(_i, line)| match line {
+        .filter_map(|line| match line {
             Ok(line) => {
                 map.insert(&line);
-                println!("map: {:?}", map);
+                Some(())
+                // println!("map: {:?}", map);
+                // println!("======================\n{}", line);
+                // println!("{}", serde_json::to_string(&map).unwrap());
             }
-            Err(err) => eprintln!("Error processing line: {:?}", err),
-        });
+            Err(err) => {
+                eprintln!("Error processing line: {:?}", err);
+                None
+            }
+        })
+        .enumerate()
+        .take_while(|(i, _line)| *i + 1 < max_lines)
+        .for_each(|(_i, _line)| {});
 
     Ok(())
 }
