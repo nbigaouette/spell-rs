@@ -7,10 +7,10 @@ type Result<T> = std::result::Result<T, Box<Error>>;
 use spell::map::LcsMap;
 
 fn main() -> Result<()> {
-    let path = "data/var/log/messages";
+    let path: String = std::env::args().nth(1).unwrap();
 
     let max_lines: usize = std::env::args()
-        .nth(1)
+        .nth(2)
         .map(|i| i.parse().unwrap())
         .unwrap_or_else(|| usize::max_value());
 
