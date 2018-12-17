@@ -4,7 +4,10 @@ _spell-rs_ is a _Spell_ implementation in Rust.
 
 Spell is a _**S**treaming **P**arser for **E**vent **L**ogs using an **L**CS_ (Longest Common Subsequence).
 
+[![Crates.io](https://img.shields.io/crates/v/spell.svg)](https://crates.io/crates/spell)
 [![Build Status](https://travis-ci.org/nbigaouette/spell-rs.svg?branch=master)](https://travis-ci.org/nbigaouette/spell-rs)
+[![Documentation](https://docs.rs/spell/badge.svg)](https://docs.rs/spell)
+[![License](https://img.shields.io/crates/l/spell.svg)](#license)
 
 The minimum Rust version is 1.31 due to the `use crate::` syntax.
 
