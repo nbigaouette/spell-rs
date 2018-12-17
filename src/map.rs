@@ -80,7 +80,6 @@ impl std::fmt::Display for LcsMap {
 #[cfg(test)]
 mod tests {
     use super::*;
-    // use crate::{object::LcsObject, LineId};
 
     fn fixtures_input_var_log_messages_lines() -> [&'static str; 6] {
         [
