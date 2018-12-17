@@ -3,6 +3,14 @@ name = "spell"
 version = "0.1.0"
 authors = ["Nicolas Bigaouette <nbigaouette@elementai.com>"]
 edition = "2018"
+license = "MIT/Apache-2.0"
+readme = "README.md"
+keywords = ["spell", "lcs", "log", "parsing"]
+categories = ["parsing", "science", "text-processing", "value-formatting"]
+repository = "https://github.com/nbigaouette/spell-rs"
+homepage = "https://github.com/nbigaouette/spell-rs"
+documentation = "https://docs.rs/spell-rs"
+description = "Spell is a Streaming Parser for Event Logs using an LCS_ (Longest Common Subsequence)."
 
 [dependencies]
 serde = "1.0"
