@@ -25,9 +25,6 @@ fn main() -> Result<()> {
             Ok(line) => {
                 map.insert(&line);
                 Some(())
-                // println!("map: {:?}", map);
-                // println!("======================\n{}", line);
-                // println!("{}", serde_json::to_string(&map).unwrap());
             }
             Err(err) => {
                 eprintln!("Error processing line: {:?}", err);
@@ -37,6 +34,9 @@ fn main() -> Result<()> {
         .enumerate()
         .take_while(|(i, _line)| *i + 1 < max_lines)
         .for_each(|(_i, _line)| {});
+
+    println!("----------------------------");
+    println!("{}", map.to_string());
 
     Ok(())
 }
