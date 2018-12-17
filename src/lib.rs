@@ -6,14 +6,8 @@ pub type LineId = usize;
 pub type LcsToken = String;
 pub type LcsSeq = Vec<LcsToken>;
 
-// const TOKENIZATION_DELIMITERS: &[char] = &[' ', ',', '/', '\\'];
-// const TOKENIZATION_DELIMITERS: &[char] = &[' '];
-
 pub fn tokenize(input: &str) -> impl Iterator<Item = &str> {
-    input
-        .trim()
-        .split_whitespace()
-        .filter(|s| !s.is_empty())
+    input.trim().split_whitespace().filter(|s| !s.is_empty())
 }
 
 #[cfg(test)]
