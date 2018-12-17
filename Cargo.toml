@@ -10,7 +10,7 @@ categories = ["parsing", "science", "text-processing", "value-formatting"]
 repository = "https://github.com/nbigaouette/spell-rs"
 homepage = "https://github.com/nbigaouette/spell-rs"
 documentation = "https://docs.rs/spell-rs"
-description = "Spell is a Streaming Parser for Event Logs using an LCS_ (Longest Common Subsequence)."
+description = "Spell is a Streaming Parser for Event Logs using an LCS (Longest Common Subsequence)"
 
 [dependencies]
 serde = "1.0"
