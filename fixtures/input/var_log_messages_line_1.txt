@@ -1,0 +1,1 @@
+Jan 22 04:11:04 combo syslogd 1.4.1: restart.

@@ -1,0 +1,1 @@
+Jan 22 05:23:19 combo sshd(pam_unix)[24892]: authentication failure; logname= uid=0 euid=0 tty=NODEVssh ruser= rhost=server3.sugolan.hu

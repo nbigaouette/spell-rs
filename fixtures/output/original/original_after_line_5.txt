@@ -1,0 +1,13 @@
+	3 Objects in the LCSMap
+
+	Object 0:
+		Jan 22 04:11:04 combo syslogd 1.4.1: restart.
+		{0}
+	Object 1:
+		Jan 22 04:11:04 combo logrotate: ALERT exited abnormally with [1]
+		{1}
+	Object 2:
+		Jan 22 * combo * user *
+		{2, 3, 4}
+
+	5 total entries found, 5 expected.

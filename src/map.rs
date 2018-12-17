@@ -82,111 +82,64 @@ mod tests {
     use super::*;
     // use crate::{object::LcsObject, LineId};
 
+    fn fixtures_input_var_log_messages_lines() -> [&'static str; 6] {
+        [
+            include_str!("../fixtures/input/var_log_messages_line_1.txt"),
+            include_str!("../fixtures/input/var_log_messages_line_2.txt"),
+            include_str!("../fixtures/input/var_log_messages_line_3.txt"),
+            include_str!("../fixtures/input/var_log_messages_line_4.txt"),
+            include_str!("../fixtures/input/var_log_messages_line_5.txt"),
+            include_str!("../fixtures/input/var_log_messages_line_6.txt"),
+        ]
+    }
+
+    fn fixtures_output_original_impl() -> [&'static str; 6] {
+        [
+            include_str!("../fixtures/output/original/original_after_line_1.txt"),
+            include_str!("../fixtures/output/original/original_after_line_2.txt"),
+            include_str!("../fixtures/output/original/original_after_line_3.txt"),
+            include_str!("../fixtures/output/original/original_after_line_4.txt"),
+            include_str!("../fixtures/output/original/original_after_line_5.txt"),
+            include_str!("../fixtures/output/original/original_after_line_6.txt"),
+        ]
+    }
+
     #[test]
     fn compare_java() {
+        let inputs = fixtures_input_var_log_messages_lines();
+        let expected = fixtures_output_original_impl();
+
         let mut map = LcsMap::new();
 
-        map.insert("Jan 22 04:11:04 combo syslogd 1.4.1: restart.");
+        map.insert(inputs[0]);
         let to_check = map.to_string();
-        let expected = "\t1 Objects in the LCSMap
+        assert_eq!(to_check, expected[0]);
 
-\tObject 0:
-\t\tJan 22 04:11:04 combo syslogd 1.4.1: restart.
-\t\t{0}
-
-\t1 total entries found, 1 expected.";
-        assert_eq!(to_check, expected);
-
-        map.insert("Jan 22 04:11:04 combo logrotate: ALERT exited abnormally with [1]");
+        map.insert(inputs[1]);
         let to_check = map.to_string();
-        let expected = "\t2 Objects in the LCSMap
+        assert_eq!(to_check, expected[1]);
 
-\tObject 0:
-\t\tJan 22 04:11:04 combo syslogd 1.4.1: restart.
-\t\t{0}
-\tObject 1:
-\t\tJan 22 04:11:04 combo logrotate: ALERT exited abnormally with [1]
-\t\t{1}
-
-\t2 total entries found, 2 expected.";
-        assert_eq!(to_check, expected);
-
-        map.insert(
-            "Jan 22 04:16:40 combo su(pam_unix)[21719]: session opened for user news by (uid=0)",
-        );
+        map.insert(inputs[2]);
         let to_check = map.to_string();
-        let expected = "\t3 Objects in the LCSMap
+        assert_eq!(to_check, expected[2]);
 
-\tObject 0:
-\t\tJan 22 04:11:04 combo syslogd 1.4.1: restart.
-\t\t{0}
-\tObject 1:
-\t\tJan 22 04:11:04 combo logrotate: ALERT exited abnormally with [1]
-\t\t{1}
-\tObject 2:
-\t\tJan 22 04:16:40 combo su(pam_unix)[21719]: session opened for user news by (uid=0)
-\t\t{2}
-
-\t3 total entries found, 3 expected.";
-        assert_eq!(to_check, expected);
-
-        map.insert("Jan 22 04:16:41 combo su(pam_unix)[21719]: session closed for user news");
+        map.insert(inputs[3]);
         let to_check = map.to_string();
-        let expected = "\t3 Objects in the LCSMap
+        assert_eq!(to_check, expected[3]);
 
-\tObject 0:
-\t\tJan 22 04:11:04 combo syslogd 1.4.1: restart.
-\t\t{0}
-\tObject 1:
-\t\tJan 22 04:11:04 combo logrotate: ALERT exited abnormally with [1]
-\t\t{1}
-\tObject 2:
-\t\tJan 22 * combo su(pam_unix)[21719]: session * for user news
-\t\t{2, 3}
-
-\t4 total entries found, 4 expected.";
-        assert_eq!(to_check, expected);
-
-        map.insert("Jan 22 05:23:19 combo sshd(pam_unix)[24892]: check pass; user unknown");
+        map.insert(inputs[4]);
         let to_check = map.to_string();
-        let expected = "\t3 Objects in the LCSMap
+        assert_eq!(to_check, expected[4]);
 
-\tObject 0:
-\t\tJan 22 04:11:04 combo syslogd 1.4.1: restart.
-\t\t{0}
-\tObject 1:
-\t\tJan 22 04:11:04 combo logrotate: ALERT exited abnormally with [1]
-\t\t{1}
-\tObject 2:
-\t\tJan 22 * combo * user *
-\t\t{2, 3, 4}
-
-\t5 total entries found, 5 expected.";
-        assert_eq!(to_check, expected);
-
-        map.insert("Jan 22 05:23:19 combo sshd(pam_unix)[24892]: authentication failure; logname= uid=0 euid=0 tty=NODEVssh ruser= rhost=server3.sugolan.hu");
+        map.insert(inputs[5]);
         let to_check = map.to_string();
-        let expected = "\t4 Objects in the LCSMap
-
-\tObject 0:
-\t\tJan 22 04:11:04 combo syslogd 1.4.1: restart.
-\t\t{0}
-\tObject 1:
-\t\tJan 22 04:11:04 combo logrotate: ALERT exited abnormally with [1]
-\t\t{1}
-\tObject 2:
-\t\tJan 22 * combo * user *
-\t\t{2, 3, 4}
-\tObject 3:
-\t\tJan 22 05:23:19 combo sshd(pam_unix)[24892]: authentication failure; logname= uid=0 euid=0 tty=NODEVssh ruser= rhost=server3.sugolan.hu
-\t\t{5}
-
-\t6 total entries found, 6 expected.";
-        assert_eq!(to_check, expected);
+        assert_eq!(to_check, expected[5]);
     }
 
     #[test]
     fn parse_log() {
+        let inputs = fixtures_input_var_log_messages_lines();
+
         let mut map = LcsMap::new();
         let expected = LcsMap {
             seq: Vec::new(),
@@ -194,7 +147,7 @@ mod tests {
         };
         assert_eq!(map, expected);
 
-        map.insert("Jan 22 04:11:04 combo syslogd 1.4.1: restart.");
+        map.insert(inputs[0]);
         let expected = LcsMap {
             seq: vec![LcsObject {
                 tokens: [
@@ -209,7 +162,7 @@ mod tests {
         };
         assert_eq!(map, expected);
 
-        map.insert("Jan 22 04:11:04 combo logrotate: ALERT exited abnormally with [1]");
+        map.insert(inputs[1]);
         let expected = LcsMap {
             seq: vec![
                 LcsObject {
@@ -244,9 +197,7 @@ mod tests {
         };
         assert_eq!(map, expected);
 
-        map.insert(
-            "Jan 22 04:16:40 combo su(pam_unix)[21719]: session opened for user news by (uid=0)",
-        );
+        map.insert(inputs[2]);
         let expected = LcsMap {
             seq: vec![
                 LcsObject {
@@ -301,7 +252,7 @@ mod tests {
         };
         assert_eq!(map, expected);
 
-        map.insert("Jan 22 04:16:41 combo su(pam_unix)[21719]: session closed for user news");
+        map.insert(inputs[3]);
         let expected = LcsMap {
             seq: vec![
                 LcsObject {
@@ -354,7 +305,7 @@ mod tests {
         };
         assert_eq!(map, expected);
 
-        map.insert("Jan 22 05:23:19 combo sshd(pam_unix)[24892]: check pass; user unknown");
+        map.insert(inputs[4]);
         let expected = LcsMap {
             seq: vec![
                 LcsObject {
@@ -396,7 +347,7 @@ mod tests {
         };
         assert_eq!(map, expected);
 
-        map.insert("Jan 22 05:23:19 combo sshd(pam_unix)[24892]: authentication failure; logname= uid=0 euid=0 tty=NODEVssh ruser= rhost=server3.sugolan.hu");
+        map.insert(inputs[5]);
         let expected = LcsMap {
             seq: vec![
                 LcsObject {
