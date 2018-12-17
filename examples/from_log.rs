@@ -11,10 +11,8 @@ fn main() -> Result<()> {
 
     let max_lines: usize = std::env::args()
         .nth(1)
-        .map(|i| i.parse())
-        .ok_or_else(|| usize::max_value())
-        .unwrap()
-        .unwrap();
+        .map(|i| i.parse().unwrap())
+        .unwrap_or_else(|| usize::max_value());
 
     let input = File::open(path)?;
     let buffered = BufReader::new(input);
