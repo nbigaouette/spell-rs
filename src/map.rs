@@ -8,6 +8,24 @@ pub struct LcsMap {
     pub line_id: LineId,
 }
 
+macro_rules! fold_get_match {
+    ($iter:expr, $tokenized:expr) => {
+        $iter.fold((None, 0), |(best_match, best_match_length), obj| {
+            // Pruning as described in paper
+            if obj.length() < $tokenized.len() / 2 || obj.length() > $tokenized.len() * 2 {
+                (best_match, best_match_length)
+            } else {
+                let l = obj.get_lcs($tokenized);
+                if l >= $tokenized.len() / 2 && l > best_match_length {
+                    (Some(obj), l)
+                } else {
+                    (best_match, best_match_length)
+                }
+            }
+        })
+    };
+}
+
 impl LcsMap {
     pub fn new() -> LcsMap {
         Default::default()
@@ -18,7 +36,7 @@ impl LcsMap {
 
         let line_id = self.line_id;
 
-        match self.get_match(&tokenized) {
+        match self.get_match_mut(&tokenized) {
             None => {
                 let obj = LcsObject::new(tokenized, line_id);
                 self.seq.push(obj);
@@ -30,23 +48,13 @@ impl LcsMap {
         self.line_id += 1;
     }
 
-    fn get_match(&mut self, tokenized: &LcsSeq) -> Option<&mut LcsObject> {
-        let (best_match, _best_match_length) =
-            self.seq
-                .iter_mut()
-                .fold((None, 0), |(best_match, best_match_length), obj| {
-                    // Pruning as described in paper
-                    if obj.length() < tokenized.len() / 2 || obj.length() > tokenized.len() * 2 {
-                        (best_match, best_match_length)
-                    } else {
-                        let l = obj.get_lcs(tokenized);
-                        if l >= tokenized.len() / 2 && l > best_match_length {
-                            (Some(obj), l)
-                        } else {
-                            (best_match, best_match_length)
-                        }
-                    }
-                });
+    pub fn get_match(&self, tokenized: &LcsSeq) -> Option<&LcsObject> {
+        let (best_match, _best_match_length) = fold_get_match!(self.seq.iter(), tokenized);
+        best_match
+    }
+
+    pub fn get_match_mut(&mut self, tokenized: &LcsSeq) -> Option<&mut LcsObject> {
+        let (best_match, _best_match_length) = fold_get_match!(self.seq.iter_mut(), tokenized);
         best_match
     }
 

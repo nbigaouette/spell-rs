@@ -1,6 +1,6 @@
 [package]
 name = "spell"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Nicolas Bigaouette <nbigaouette@elementai.com>"]
 edition = "2018"
 license = "MIT/Apache-2.0"
@@ -18,3 +18,6 @@ travis-ci = { repository = "nbigaouette/spell-rs" }
 [dependencies]
 serde = "1.0"
 serde_derive = "1.0"
+
+[dev-dependencies]
+csv = "1.0.5"
