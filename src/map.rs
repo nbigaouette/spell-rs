@@ -1,11 +1,12 @@
 use serde_derive::*;
 
-use crate::{object::LcsObject, tokenize, LcsSeq, LineId};
+use crate::{object::LcsObject, LcsDelimiters, tokenize, LcsSeq, LineId};
 
 #[derive(Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct LcsMap {
     pub seq: Vec<LcsObject>,
     pub line_id: LineId,
+    pub delimiters: LcsDelimiters,
 }
 
 macro_rules! fold_get_match {
@@ -27,12 +28,16 @@ macro_rules! fold_get_match {
 }
 
 impl LcsMap {
-    pub fn new() -> LcsMap {
-        Default::default()
+    pub fn new(delimiters: Option<Vec<char>>) -> LcsMap {
+        let delimiters = delimiters.unwrap_or(vec![' ']);
+        LcsMap {
+            delimiters,
+            ..Default::default()
+        }
     }
 
     pub fn insert(&mut self, entry: &str) {
-        let tokenized: LcsSeq = tokenize(entry).map(|token| token.to_string()).collect();
+        let tokenized: LcsSeq = tokenize(entry, self.delimiters.as_slice()).map(|token| token.to_string()).collect();
 
         let line_id = self.line_id;
 
@@ -116,7 +121,7 @@ mod tests {
         let inputs = fixtures_input_var_log_messages_lines();
         let expected = fixtures_output_original_impl();
 
-        let mut map = LcsMap::new();
+        let mut map = LcsMap::new(None);
 
         map.insert(inputs[0]);
         let to_check = map.to_string();
@@ -147,10 +152,11 @@ mod tests {
     fn parse_log() {
         let inputs = fixtures_input_var_log_messages_lines();
 
-        let mut map = LcsMap::new();
+        let mut map = LcsMap::new(None);
         let expected = LcsMap {
             seq: Vec::new(),
             line_id: 0,
+            delimiters: vec![' '],
         };
         assert_eq!(map, expected);
 
@@ -166,6 +172,7 @@ mod tests {
                 lines_ids: vec![0],
             }],
             line_id: 1,
+            delimiters: vec![' '],
         };
         assert_eq!(map, expected);
 
@@ -201,6 +208,7 @@ mod tests {
                 },
             ],
             line_id: 2,
+            delimiters: vec![' '],
         };
         assert_eq!(map, expected);
 
@@ -256,6 +264,7 @@ mod tests {
                 },
             ],
             line_id: 3,
+            delimiters: vec![' '],
         };
         assert_eq!(map, expected);
 
@@ -309,6 +318,7 @@ mod tests {
                 },
             ],
             line_id: 4,
+            delimiters: vec![' '],
         };
         assert_eq!(map, expected);
 
@@ -351,6 +361,7 @@ mod tests {
                 },
             ],
             line_id: 5,
+            delimiters: vec![' '],
         };
         assert_eq!(map, expected);
 
@@ -414,6 +425,7 @@ mod tests {
                 },
             ],
             line_id: 6,
+            delimiters: vec![' '],
         };
         assert_eq!(map, expected);
     }
