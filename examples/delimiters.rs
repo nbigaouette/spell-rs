@@ -17,7 +17,7 @@ fn main() -> Result<()> {
     let input = File::open(path)?;
     let buffered = BufReader::new(input);
 
-    let mut map = LcsMap::new();
+    let mut map = LcsMap::with_delimiters(vec![' ', ',']);
 
     buffered
         .lines()
