@@ -1,11 +1,12 @@
 use serde_derive::*;
 
-use crate::{object::LcsObject, tokenize, LcsSeq, LineId};
+use crate::{object::LcsObject, tokenize, LcsDelimiters, LcsSeq, LineId};
 
 #[derive(Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct LcsMap {
     pub seq: Vec<LcsObject>,
     pub line_id: LineId,
+    pub delimiters: LcsDelimiters,
 }
 
 macro_rules! fold_get_match {
@@ -28,11 +29,24 @@ macro_rules! fold_get_match {
 
 impl LcsMap {
     pub fn new() -> LcsMap {
-        Default::default()
+        LcsMap {
+            delimiters: vec![' '],
+            ..Default::default()
+        }
+    }
+
+    /// Constructor to create an LcsMap with different set of delimiters.
+    pub fn with_delimiters(delimiters: Vec<char>) -> LcsMap {
+        LcsMap {
+            delimiters,
+            ..LcsMap::new()
+        }
     }
 
     pub fn insert(&mut self, entry: &str) {
-        let tokenized: LcsSeq = tokenize(entry).map(|token| token.to_string()).collect();
+        let tokenized: LcsSeq = tokenize(entry, self.delimiters.as_slice())
+            .map(|token| token.to_string())
+            .collect();
 
         let line_id = self.line_id;
 
@@ -151,6 +165,7 @@ mod tests {
         let expected = LcsMap {
             seq: Vec::new(),
             line_id: 0,
+            delimiters: vec![' '],
         };
         assert_eq!(map, expected);
 
@@ -166,6 +181,7 @@ mod tests {
                 lines_ids: vec![0],
             }],
             line_id: 1,
+            delimiters: vec![' '],
         };
         assert_eq!(map, expected);
 
@@ -201,6 +217,7 @@ mod tests {
                 },
             ],
             line_id: 2,
+            delimiters: vec![' '],
         };
         assert_eq!(map, expected);
 
@@ -256,6 +273,7 @@ mod tests {
                 },
             ],
             line_id: 3,
+            delimiters: vec![' '],
         };
         assert_eq!(map, expected);
 
@@ -309,6 +327,7 @@ mod tests {
                 },
             ],
             line_id: 4,
+            delimiters: vec![' '],
         };
         assert_eq!(map, expected);
 
@@ -351,6 +370,7 @@ mod tests {
                 },
             ],
             line_id: 5,
+            delimiters: vec![' '],
         };
         assert_eq!(map, expected);
 
@@ -414,6 +434,36 @@ mod tests {
                 },
             ],
             line_id: 6,
+            delimiters: vec![' '],
+        };
+        assert_eq!(map, expected);
+    }
+
+    #[test]
+    fn parse_log_with_delimiters() {
+        let inputs = fixtures_input_var_log_messages_lines();
+
+        let mut map = LcsMap::with_delimiters(vec![' ', ':']);
+        let expected = LcsMap {
+            seq: Vec::new(),
+            line_id: 0,
+            delimiters: vec![' ', ':'],
+        };
+        assert_eq!(map, expected);
+
+        map.insert(inputs[0]);
+        let expected = LcsMap {
+            seq: vec![LcsObject {
+                tokens: [
+                    "Jan", "22", "04", "11", "04", "combo", "syslogd", "1.4.1", "restart.",
+                ]
+                .iter()
+                .map(|s| s.to_string())
+                .collect(),
+                lines_ids: vec![0],
+            }],
+            line_id: 1,
+            delimiters: vec![' ', ':'],
         };
         assert_eq!(map, expected);
     }

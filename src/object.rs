@@ -1,6 +1,6 @@
 use serde_derive::*;
 
-use crate::{tokenize, LcsSeq, LineId};
+use crate::{tokenize, LcsSeq, LineId, LcsDelimiters};
 
 #[derive(Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct LcsObject {
@@ -9,8 +9,8 @@ pub struct LcsObject {
 }
 
 impl LcsObject {
-    pub fn from_str(s: &str, line_id: LineId) -> LcsObject {
-        let tokens = tokenize(s).map(|s| s.to_string()).collect();
+    pub fn from_str(s: &str, line_id: LineId, delimiters: LcsDelimiters) -> LcsObject {
+        let tokens = tokenize(s, delimiters.as_slice()).map(|s| s.to_string()).collect();
         LcsObject::new(tokens, line_id)
     }
 
@@ -112,6 +112,6 @@ mod tests {
     #[test]
     fn constructor() {
         let input = "Command Failed on: node-127";
-        let _lcs_object = LcsObject::from_str(input, 0);
+        let _lcs_object = LcsObject::from_str(input, 0, vec![' ']);
     }
 }
