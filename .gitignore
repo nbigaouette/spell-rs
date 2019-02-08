@@ -1,3 +1,9 @@
 target
 Cargo.lock
 data
+.python-version
+.venv
+*.egg-info
+spellrs
+build
+*.so
