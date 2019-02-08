@@ -48,6 +48,8 @@ as the [Java one](https://github.com/EddiePi/Spell).
 Universal Python package (wheel) can be built on all platforms using:
 
 ```sh
+cd python
+
 # Compile Rust code
 pip install --editable .
 
