@@ -1,5 +1,6 @@
 use spell::map::LcsMap;
 
+#[derive(Debug)]
 pub struct _Map {
     map: LcsMap,
 }
