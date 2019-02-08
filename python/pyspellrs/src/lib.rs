@@ -65,7 +65,7 @@ pub unsafe extern "C" fn insert_in_map(map_ptr: *const _Map, line: *const c_char
             }
             Err(e) => {
                 log::error!(
-                    "ERROR creating API: Server not a valid UTF-8 string {:?}",
+                    "Given line is not a valid UTF-8 string {:?}",
                     e
                 );
             }
