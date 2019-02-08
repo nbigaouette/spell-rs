@@ -1,3 +1,5 @@
+use std::{ffi::CStr, os::raw::c_char};
+
 use spell::map::LcsMap;
 
 #[derive(Debug)]
@@ -34,6 +36,41 @@ pub unsafe extern "C" fn new_map() -> *const _Map {
     log::debug!("Created map: {:?}", map_ptr);
 
     map_ptr
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn insert_in_map(map_ptr: *const _Map, line: *const c_char) {
+    log::debug!("Inserting line in map...");
+
+    if map_ptr.is_null() {
+        log::error!("ERROR: Passed a null pointer for the map");
+    } else if line.is_null() {
+        log::error!("ERROR: Passed a null pointer for the line");
+    } else {
+        let c_str = CStr::from_ptr(line);
+
+        match c_str.to_str() {
+            Ok(line) => {
+                log::debug!("Inserting line into map: {:?}", line);
+
+                // We convert back to an `LcsMap` (from an `_Map` pointer) but we need to prevent
+                // it from being dropped when going out of scope.
+                let mut map = Box::from_raw(map_ptr as *mut _Map);
+
+                map.map.insert(line);
+                println!("map: {:?}", map);
+
+                // Don't drop the map!
+                std::mem::forget(map);
+            }
+            Err(e) => {
+                log::error!(
+                    "ERROR creating API: Server not a valid UTF-8 string {:?}",
+                    e
+                );
+            }
+        }
+    }
 }
 
 #[no_mangle]
