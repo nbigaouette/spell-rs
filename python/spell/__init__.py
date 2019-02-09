@@ -1,7 +1,5 @@
 from spell._native import ffi, lib
 
-# https://michaeljung.pro/2017/11/12/passing-strings-from-python-to-rust/
-
 
 def to_cstring(text):
     return ffi.new("char[]", text.encode("utf-8"))
