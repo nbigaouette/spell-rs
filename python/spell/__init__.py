@@ -43,24 +43,3 @@ class Spell:
         lib.free_map(self.map)
         self.map = ffi.NULL
 
-
-def test():
-    print("Initializing logger...")
-    lib.init_env_logger()
-    print("Initializing logger done.")
-    print("Creating map...")
-    spell_map = Spell()
-    print("Creating map done.")
-
-    print("Inserting lines into map...")
-    spell_map.insert("Command Failed on: node-127,node-234")
-    spell_map.insert("Command Failed on: node-128,node-234")
-    spell_map.insert("Command Failed on: node-129,node-235")
-    print("Matching a line in the map...")
-    lcs_object = spell_map.match("Command Failed on: node-130,node-235")
-    for token in lcs_object.tokens():
-        print(token)
-    for line_id in lcs_object.line_ids():
-        print(line_id)
-
-    print("Freeing...")
