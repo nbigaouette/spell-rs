@@ -43,6 +43,23 @@ which can then be used to analyze the logs.
 As of cedf57a7a73b1052de937d13150c2b9d8a03237c, the Rust implementation gives the exact same results
 as the [Java one](https://github.com/EddiePi/Spell).
 
+## Python Wrapper
+
+Universal Python package (wheel) can be built on all platforms using:
+
+```sh
+cd python
+
+# Compile Rust code
+pip install --editable .
+
+# Test Python package
+python ./test.py
+
+# Build a wheel
+python setup.py --verbose bdist_wheel
+```
+
 ## Other Implementations
 
 * [Spell](https://github.com/EddiePi/Spell), Java version

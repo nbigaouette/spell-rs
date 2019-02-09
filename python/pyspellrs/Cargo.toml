@@ -1,0 +1,22 @@
+[package]
+name = "pyspellrs"
+version = "0.1.4"
+authors = ["Nicolas Bigaouette <nbigaouette@gmail.com>"]
+edition = "2018"
+build = "build.rs"
+
+[lib]
+name = "pyspellrs"
+crate-type = ["cdylib"]
+
+[dependencies]
+spell = { path = "../.." }
+log = "0.4"
+env_logger = "0.6"
+
+[build-dependencies]
+# cbindgen = "0.6"
+# Depend on the fork from https://github.com/eqrion/cbindgen/pull/271
+# See https://github.com/eqrion/cbindgen/issues/203
+cbindgen = { git = "https://github.com/Mrmaxmeier/cbindgen.git", rev = "996fa88ef7672042546b3ccd0e744539a3a645d7" }
+
