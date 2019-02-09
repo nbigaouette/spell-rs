@@ -179,8 +179,7 @@ pub unsafe extern "C" fn object_ith_token(object_ptr: *const _Object, i: u64) ->
 
         let i = i as usize;
         let token_str_ptr = if i < object.object.tokens.len() {
-            // Safe to unwrap since we are inside a bound check
-            let c_str = CString::new(object.object.tokens.get(i).unwrap().clone()).unwrap();
+            let c_str = CString::new(object.object.tokens[i].clone()).unwrap();
             c_str.into_raw()
         } else {
             std::ptr::null()
@@ -202,8 +201,7 @@ pub unsafe extern "C" fn object_ith_line_id(object_ptr: *const _Object, i: u64) 
 
         let i = i as usize;
         let line_id_str_ptr = if i < object.object.lines_ids.len() {
-            // Safe to unwrap since we are inside a bound check
-            *object.object.lines_ids.get(i).unwrap()
+            *object.object.lines_ids[i]
         } else {
             log::error!("Index passed to object_ith_line_id() larger than length, returning 0 instead of crashing.");
             0
