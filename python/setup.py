@@ -35,7 +35,6 @@ def build_native(spec):
     # only called after the external build finished.
     cargo_target_dir = os.getenv('CARGO_TARGET_DIR', 'target')
     in_path_dylib = os.path.normpath(os.path.join(cargo_target_dir, RUST_BUILD))
-    # in_path_header = os.path.normpath(cargo_target_dir)
     in_path_header = os.path.normpath("target")
     spec.add_cffi_module(
         module_path='spell._native',
