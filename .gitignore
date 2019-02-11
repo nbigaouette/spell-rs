@@ -8,3 +8,4 @@ spellrs
 build
 *.so
 cache
+dist
