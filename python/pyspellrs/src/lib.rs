@@ -201,7 +201,7 @@ pub unsafe extern "C" fn object_ith_line_id(object_ptr: *const _Object, i: u64) 
 
         let i = i as usize;
         let line_id_str_ptr = if i < object.object.lines_ids.len() {
-            *object.object.lines_ids[i]
+            object.object.lines_ids[i]
         } else {
             log::error!("Index passed to object_ith_line_id() larger than length, returning 0 instead of crashing.");
             0

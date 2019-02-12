@@ -1,0 +1,9 @@
+target
+.venv
+data
+build
+dist
+cache
+.git
+.vscode
+docker

@@ -24,9 +24,12 @@ def build_native(spec):
         cmd.append('--release')
     cmd.append('--package')
     cmd.append('pyspellrs')
+
+    file_path = os.path.dirname(os.path.realpath(__file__))
+    add_external_build_path = os.path.realpath(os.path.dirname(file_path))
     build = spec.add_external_build(
         cmd=cmd,
-        path='..'
+        path=add_external_build_path
     )
 
     # Step 2: add a cffi module based on the dylib we built
@@ -35,7 +38,6 @@ def build_native(spec):
     # only called after the external build finished.
     cargo_target_dir = os.getenv('CARGO_TARGET_DIR', 'target')
     in_path_dylib = os.path.normpath(os.path.join(cargo_target_dir, RUST_BUILD))
-    # in_path_header = os.path.normpath(cargo_target_dir)
     in_path_header = os.path.normpath("target")
     spec.add_cffi_module(
         module_path='spell._native',
