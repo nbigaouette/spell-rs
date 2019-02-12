@@ -60,6 +60,18 @@ python ./test.py
 python setup.py --verbose bdist_wheel
 ```
 
+### Docker
+
+This only requires Docker.
+
+```sh
+# Build a Docker image containing everything required
+./docker/docker_build.sh
+
+# Run the commands to build wheel inside a docker container
+./docker/docker_run.sh
+```
+
 ## Other Implementations
 
 * [Spell](https://github.com/EddiePi/Spell), Java version
