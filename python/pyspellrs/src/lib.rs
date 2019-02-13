@@ -61,7 +61,6 @@ pub unsafe extern "C" fn insert_in_map(map_ptr: *const _Map, line: *const c_char
                 let mut map = Box::from_raw(map_ptr as *mut _Map);
 
                 map.map.insert(line);
-                println!("map: {:?}", map);
 
                 // Don't drop the map!
                 std::mem::forget(map);
